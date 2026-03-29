@@ -1,0 +1,31 @@
+# ======================
+# Python / Django
+# ======================
+backend/venv/
+venv/
+__pycache__/
+*.pyc
+db.sqlite3
+
+# Django media files
+backend/media/
+
+# Environment variables
+.env
+
+# ======================
+# React / Node
+# ======================
+frontend/node_modules/
+node_modules/
+
+# Build files
+frontend/dist/
+dist/
+
+# ======================
+# Editor files
+# ======================
+.vscode/
+.DS_Store
+Thumbs.db
