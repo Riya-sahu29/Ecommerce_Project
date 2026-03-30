@@ -10,7 +10,7 @@ function Navbar() {
 
     const isLoggedIn = !!getAccessToken();
 
-    const handleLogout = () => {
+    const handleLogout = () => {    
         clearTokens();
         nav('/login');
     };
@@ -54,4 +54,4 @@ function Navbar() {
     )
 }
 
-export default Navbar;
+export default Navbar;  
