@@ -43,7 +43,7 @@ function CheckoutPage() {
             if (response.ok) {
                 setMessage("Order placed successfully!");
                 await authFetch(`${BASEURL}/api/cart/clear/`, {
-                    method: "DELETE",
+                    method: "POST",
                 });
                 clearCart();
                 setTimeout(() => {
