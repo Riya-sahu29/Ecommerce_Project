@@ -10,7 +10,7 @@ This project demonstrates a real-world scalable architecture with API integratio
 
 ### 🔹 Frontend
 
-* React (Vite)
+* React (Vite)   
 * React Router DOM
 * Tailwind CSS
 * Fetch API (for backend communication)
