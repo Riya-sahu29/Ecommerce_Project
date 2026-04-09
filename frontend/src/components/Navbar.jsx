@@ -10,48 +10,60 @@ function Navbar() {
 
     const isLoggedIn = !!getAccessToken();
 
-    const handleLogout = () => {    
+    const handleLogout = () => {
         clearTokens();
         nav('/login');
     };
 
     return (
-        <nav className='bg-white shadow-md px-6 py-4 flex justify-between items-center fixed w-full top-0 z-50'>
-            <Link to='/' className='text-2xl font-bold text-gray-800 flex items-center gap-2'>
-                <span role='img' aria-label='shopping-cart'>🛍️</span>
-                <span>ShopEase</span>
-            </Link>
+        <nav className="bg-white shadow-md fixed w-full top-0 z-50">
+            <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
 
-            <div className='flex items-center gap-6'>
-                { /* Login/signup or logout */}
+                <Link to="/" className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 flex items-center gap-2">
+                    <span role="img" aria-label="shopping-cart">🛍️</span>
+                    <span>shopEase</span>
+                </Link>
+
+                <div className="flex items-center gap-3 sm:gap-5 md:gap-6">
+
                     {!isLoggedIn ? (
                         <>
-                            <Link to='/login' className='text-gray-800 hover:text-gray-600 font-medium'>
-                            Login
+                            <Link to="/login" className="text-sm sm:text-base text-gray-800 hover:text-blue-600 font-medium">
+                                Login
                             </Link>
-                            <Link to='/signup' className='text-gray-800 hover:text-gray-600 font-medium'>
-                            Sign Up
+
+                            <Link to="/signup" className="text-sm sm:text-base text-gray-800 hover:text-blue-600 font-medium">
+                                Sign Up
                             </Link>
                         </>
-                            ) : (
-                                <button onClick={handleLogout} className='text-gray-800 hover:text-gray-600 font-medium'>
-                                    Logout
-                                </button>
-                            )}
-                    
-            </div>
+                    ) : (
+                        <button
+                            onClick={handleLogout}
+                            className="text-sm sm:text-base text-gray-800 hover:text-blue-600 font-medium"
+                        >
+                            Logout
+                        </button>
+                    )}
 
-            <Link to='/cart' className='relative text-gray-800 hover:text-gray-600 font-medium transition-colors flex items-center gap-2'>
-                <FaShoppingCart />
-                <span>Cart</span>
-                {cartItemCount > 0 && (
-                    <span className='absolute -top-2 -right-3 bg-red-500 text-white text-xs font-bold rounded-full px-2'>
-                        {cartItemCount}
-                    </span>
-                )}
-            </Link>
+                    <Link to="/cart" className="relative flex items-center gap-1 text-gray-800 hover:text-blue-600">
+                        <FaShoppingCart className="text-lg sm:text-xl" />
+                        <span className="hidden sm:inline text-sm sm:text-base">Cart</span>
+
+                        {cartItemCount > 0 && (
+                            <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs font-bold rounded-full px-2">
+                                {cartItemCount}
+                            </span>
+                        )}
+                    </Link>
+
+                </div>
+
+            </div>
         </nav>
-    )
+    );
+
 }
 
-export default Navbar;  
+export default Navbar;
+
+
