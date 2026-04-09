@@ -12,8 +12,11 @@ from django.shortcuts import get_object_or_404
 
 @api_view(['GET'])
 def get_products(request):
-    products = Product.objects.all()   
-    serializer = ProductSerializer(products, many=True)
+    category_slug = request.GET.get('category')
+    products = Product.objects.all()
+    if category_slug:
+        products = products.filter(category__slug=category_slug)
+    serializer = ProductSerializer(products, many=True, context={'request': request})
     return Response(serializer.data)
 
 
@@ -27,7 +30,7 @@ def get_product(request, id):
 @api_view(['GET'])
 def get_categories(request):
     categories = Category.objects.all()   
-    serializer = CategorySerializer(categories, many=True)
+    serializer = CategorySerializer(categories, many=True, context={'request': request})
     return Response(serializer.data)
     
 
@@ -50,7 +53,7 @@ def add_to_cart(request):
             return Response({'error': 'product_id is required'}, status=400)
         
         product = get_object_or_404(Product, id=product_id)
-        cart, created = Cart.objects.get_or_create(user_id=1)
+        cart, created = Cart.objects.get_or_create(user=request.user)
         item, created = CartItem.objects.get_or_create(cart=cart, product=product)  
         if not created:
             item.quantity += 1
@@ -104,6 +107,7 @@ def remove_from_cart(request):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def create_order(request):
     try:
         data = request.data
@@ -123,7 +127,7 @@ def create_order(request):
         
         total = sum([item.product.price * item.quantity for item in cart.items.all()])
 
-        order = Order.objects.create(user = request.user, name=name, address=address, total_amount=total)
+        order = Order.objects.create(user = request.user, name=name, address=address, phone=phone, payment_method=payment_method, total_amount=total)
 
         for item in cart.items.all():
             OrderItem.objects.create(
@@ -140,9 +144,10 @@ def create_order(request):
 
 
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def clear_cart(request):
     try:
-        cart = Cart.objects.filter(user_id=1).first()
+        cart = Cart.objects.filter(user=request.user).first()
         if not cart:
             return Response({'error': 'No cart found'}, status=400)
         

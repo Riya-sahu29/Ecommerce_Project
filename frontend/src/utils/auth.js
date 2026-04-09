@@ -12,7 +12,7 @@ export const getAccessToken = () => {
     return localStorage.getItem("access_token");
 };
 
-export const authFetch = (url, options = {}) => {
+export const authFetch = async (url, options = {}) => {
     const token = getAccessToken();
 
     const headers = {
@@ -24,5 +24,13 @@ export const authFetch = (url, options = {}) => {
         headers["Authorization"] = `Bearer ${token}`;
     }
 
-    return fetch(url, { ...options, headers });
+    const response = await fetch(url, { ...options, headers });
+    
+    if (!response.ok) {
+        const error = new Error(`HTTP ${response.status}: ${response.statusText}`);
+        error.status = response.status;
+        throw error;
+    }
+    
+    return response;
 };

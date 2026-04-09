@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { authFetch, getAccessToken } from "../utils/auth";
+import { authFetch, getAccessToken, clearTokens } from "../utils/auth";
 
 const CartContext = createContext();
 
@@ -18,6 +18,12 @@ export const CartProvider = ({ children }) => {
             setTotal(data.total || 0);
         } catch (err) {
             console.error('Error fetching cart:', err);
+            // If unauthorized, clear tokens
+            if (err.message.includes('401') || err.status === 401) {
+                clearTokens();
+                setCartItems([]);
+                setTotal(0);
+            }
         }
     };
 
@@ -38,6 +44,11 @@ export const CartProvider = ({ children }) => {
             await fetchCart();
         } catch (error) {
             console.error('Error adding to cart:', error);
+            if (error.message.includes('401') || error.status === 401) {
+                clearTokens();
+                throw new Error('Please log in to add items to cart');
+            }
+            throw error;
         }
     };
 
@@ -52,6 +63,11 @@ export const CartProvider = ({ children }) => {
             await fetchCart();
         } catch (error) {
             console.error('Error removing from cart:', error);
+            if (error.message.includes('401') || error.status === 401) {
+                clearTokens();
+                throw new Error('Please log in to modify cart');
+            }
+            throw error;
         }
     };
 
@@ -70,6 +86,11 @@ export const CartProvider = ({ children }) => {
             await fetchCart();
         } catch (error) {
             console.error('Error updating cart:', error);
+            if (error.message.includes('401') || error.status === 401) {
+                clearTokens();
+                throw new Error('Please log in to modify cart');
+            }
+            throw error;
         }
     };
 

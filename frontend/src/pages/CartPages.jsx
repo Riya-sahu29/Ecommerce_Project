@@ -1,4 +1,4 @@
-import {useCart} from '../context/CartContext';
+import { useCart } from '../context/CartContext';
 import { Link } from 'react-router-dom';
 
 function CartPage() {
@@ -11,7 +11,7 @@ function CartPage() {
             <h1 className='text-3xl font-bold mb-6 text-center'>Shopping Cart</h1>
             {cartItems.length === 0 ? (
                 <p className='text-center text-gray-600'>Your cart is empty.</p>
-            ) : (   
+            ) : (
                 <div className='max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md'>
                     {cartItems.map((item) => (
                         <div
@@ -20,7 +20,7 @@ function CartPage() {
                         >
                             <div className='flex items-center gap-4'>
                                 {item.product_image && (
-                                    <img 
+                                    <img
 
                                         src={`${BASEURL}${item.product_image}`}
                                         alt={item.product_name}
@@ -31,42 +31,42 @@ function CartPage() {
                             <div>
                                 <h2 className='text-lg font-semibold'>
                                     {item.product_name}
-                                </h2>   
+                                </h2>
                                 <p className='text-gray-600'>
-                                    ${item.product_price} 
+                                    ${item.product_price}
                                 </p>
                             </div>
 
                             <div className='flex items-center gap-3'>
                                 <button className='bg-gray-300 px-1 rounded'
-                                onClick={() =>
-                                    updateQuantity(
-                                        item.id,
-                                        item.quantity - 1
-                                    )
-                                }
+                                    onClick={() =>
+                                        updateQuantity(
+                                            item.id,
+                                            item.quantity - 1
+                                        )
+                                    }
                                 >
                                     -
                                 </button>
                                 <span>{item.quantity}</span>
                                 <button className='bg-gray-300 px-3 py-1 rounded'
-                                onClick={() =>
-                                    updateQuantity(
-                                        item.id,
-                                        item.quantity + 1
-                                    )
-                                }
+                                    onClick={() =>
+                                        updateQuantity(
+                                            item.id,
+                                            item.quantity + 1
+                                        )
+                                    }
                                 >
                                     +
                                 </button>
                                 <button className='text-red-500'
-                                 onClick={() => removeFromCart(item.id)}
-                                 >
+                                    onClick={() => removeFromCart(item.id)}
+                                >
                                     Remove
-                                 </button>
+                                </button>
 
                             </div>
-                            </div>
+                        </div>
                     ))}
                     <div className='border-t pr-4 mt-4 flex justify-between items-center'>
                         <h2 className='text-xl font-bold'>Total:</h2>
@@ -75,13 +75,13 @@ function CartPage() {
                             Proceed to Checkout
                         </Link>
 
-        </div>
+                    </div>
 
                 </div>
             )}
         </div>
     );
-}   
+}
 
 export default CartPage;
 

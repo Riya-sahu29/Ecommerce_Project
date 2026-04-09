@@ -1,15 +1,31 @@
 from rest_framework import serializers
-from .models import Category, Product, Cart, CartItem
+from .models import Category, CategoryImage, Product, ProductImage, Cart, CartItem
 from django.contrib.auth.models import User
 
 
+class CategoryImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CategoryImage
+        fields = '__all__'
+
+
 class CategorySerializer(serializers.ModelSerializer):
+    images = CategoryImageSerializer(many=True, read_only=True)
+
     class Meta:
         model = Category
         fields = '__all__'
 
+
+class ProductImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImage
+        fields = '__all__'
+
+
 class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
+    images = ProductImageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Product

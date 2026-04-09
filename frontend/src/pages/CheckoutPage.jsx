@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useNavigate} from "react-router-dom";
-import { authFetch }  from "../utils/auth";
+import { useNavigate } from "react-router-dom";
+import { authFetch } from "../utils/auth";
 import { useCart } from "../context/CartContext";
 
 function CheckoutPage() {
@@ -30,20 +30,20 @@ function CheckoutPage() {
         setLoading(true);
         setMessage("");
         try {
-            const response = await authFetch(`${BASEURL}/api/orders/create/`, 
+            const response = await authFetch(`${BASEURL}/api/orders/create/`,
                 {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify(form),
-                
-        });
+
+                });
             const data = await response.json();
             if (response.ok) {
                 setMessage("Order placed successfully!");
                 await authFetch(`${BASEURL}/api/cart/clear/`, {
-                    method: "DELETE",
+                    method: "POST",
                 });
                 clearCart();
                 setTimeout(() => {
@@ -54,15 +54,16 @@ function CheckoutPage() {
             }
         } catch (error) {
             setMessage("An error occurred. Please try again.");
-        } 
-    };  
+        }
+    };
 
-    return(
+    return (
         <div className="min-h-screen bg-gray-100 flex justify-center items-center p-6">
             <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
                 <h1 className="text-3xl font-bold mb-6 text-center">Checkout</h1>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
+
                     <input
                         type="text"
                         name="name"
@@ -71,47 +72,55 @@ function CheckoutPage() {
                         onChange={handleChange}
                         required
                         className="w-full border rounded-lg p-2"
-                        />
-                        <textarea
+                    />
+
+                    <textarea
+                    
                         name="address"
-                        placeholder="Address"   
+                        placeholder="Address"
                         value={form.address}
                         onChange={handleChange}
                         required
                         className="w-full border rounded-lg p-2"
-                        />
-                        <input
+                    />
+
+                    <input
                         type="tel"
+                        id="phone"
                         name="phone"
                         placeholder="Phone Number"
                         value={form.phone}
                         onChange={handleChange}
                         required
                         className="w-full border rounded-lg p-2"
-                        />
-                        <select
+                    />
+
+                    <select
+                        id="payment_method"
                         name="payment_method"
                         value={form.payment_method}
                         onChange={handleChange}
                         required
                         className="w-full border rounded-lg p-2"
-                        >
-                            <option value="COD">Cash on Delivery</option>
-                            <option value="creditcard">Online Payment</option>
+                    >
+                        <option value="COD">Cash on Delivery</option>
+                        <option value="creditcard">Online Payment</option>
+                    </select>
 
-                        </select>
-                        <button
+                    <button
                         type="submit"
                         disabled={loading}
                         className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300"
-                        >
-                            {loading ? "Processing..." : "Place Order"}
-                        </button>
-                        {message && (
-                            <p className="text-center text-green-700 font-semibold  mt-4">{message}</p>
-                        )}
+                    >
+                        {loading ? "Processing..." : "Place Order"}
+                    </button>
+
+                    {message && (
+                        <p className="text-center text-green-700 font-semibold mt-4">{message}</p>
+                    )}
+
                 </form>
-                </div>
+            </div>
         </div>
     )
 }
